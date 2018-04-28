@@ -2,10 +2,9 @@ package hu.pte.ttk.des.controller;
 
 import hu.pte.ttk.des.MyDes;
 import hu.pte.ttk.des.entity.Message;
-import hu.pte.ttk.des.repository.MessageRepository;
+import hu.pte.ttk.des.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +18,12 @@ public class MyController {
 
     private MyDes des = new MyDes();
 
+    private MessageService service;
+
     @Autowired
-    MessageRepository repository;
-    // erosalma
-    // It's DES
+    public void setService(MessageService service) {
+        this.service = service;
+    }
 
     @RequestMapping(value = "/")
     public String redirect(Model model) {
@@ -37,12 +38,12 @@ public class MyController {
     }
 
     @RequestMapping(value = "/list")
-    public String list(Model model,@RequestParam(defaultValue = "1") int page){
-        model.addAttribute("title","Eltárolt adatok");
-        Page<Message> messagePage = repository.findAll(PageRequest.of(page-1,8));
-        if (messagePage.getTotalPages()!=0){
+    public String list(Model model, @RequestParam(defaultValue = "1") int page) {
+        model.addAttribute("title", "Eltárolt adatok");
+        Page<Message> messagePage = service.getAll(page, 8);
+        if (messagePage.getTotalPages() != 0) {
             model.addAttribute("messages", messagePage);
-        }else {
+        } else {
             model.addAttribute("noEntity", "A tábla jelenleg üres, végezzen el egy kódolást, hogy feltöltse a táblát.");
         }
         return "list";
@@ -80,11 +81,11 @@ public class MyController {
         if ((preOutput.length % 8 == 0)) {
             if (key.length() == 8) {
                 preOutput = des.encrypt(preOutput, key);
-                preOutput= Base64.getEncoder().encode(preOutput);
-                if (preOutput!=null) {
+                preOutput = Base64.getEncoder().encode(preOutput);
+                if (preOutput != null) {
                     String output = new String(preOutput);
                     model.addAttribute("output", output);
-                    repository.saveAndFlush(new Message(text,key,output));
+                    service.save(new Message(text, key, output));
                 }
             } else {
                 model.addAttribute("keyerror", "Valahogy elrontotta a kulcsot, 8 karakter hosszúnak kell hogy legyen!");
@@ -108,8 +109,8 @@ public class MyController {
         if (preOutput.length % 8 == 0) {
             if (key.length() == 8) {
                 byte[] output = des.decrypt(preOutput, key);
-                if (output!= null) {
-                    model.addAttribute("output", new String (output));
+                if (output != null) {
+                    model.addAttribute("output", new String(output));
                 }
             } else {
                 model.addAttribute("keyerror", "Valahogy elrontotta a kulcsot, 8 karakter hosszúnak kell hogy legyen!");

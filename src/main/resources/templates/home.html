@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::head">
+</head>
+<body>
+<nav th:replace="template::nav" style="margin-bottom: auto;"></nav>
+<div class="container text-center">
+    <h1 style="font-weight: 300;">Data Encryption Standard</h1>
+    <p>Ez az oldal DES/ECB/NoPadding kódolást hajt végre
+        az adott szövegünkön, majd a kapott eredményt Base64
+        kódolással kódoljuk hogy megjeleníthető karakterekkel
+        tudjuk ábrázolni a kapott eredményt.
+    </p>
+    <strong>Figyelem! Az összes beviteli mezőbe csakis kizárólak ASCII karaktereket használjon!</strong>
+</div>
+<div th:replace="template::footer"></div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::head">
+</head>
+<body>
+<nav th:replace="template::nav" style="margin-bottom: auto;"></nav>
+<div class="container text-center">
+    <h1 th:text="${title}"></h1>
+    <strong>Ez a tábla az alkalmazás újraindulásakor törlődni fog!</strong>
+    <table th:if="${messages}" class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nyílt szöveg</th>
+                <th>Kulcs</th>
+                <th>Kódolt szöveg</th>
+            </tr>
+        </thead>
+        <th:block th:each="mes : ${messages}">
+            <tr>
+                <td style="word-break: break-all" th:text="${mes.getPlaintext()}">...</td>
+                <td th:text="${mes.getKey()}">...</td>
+                <td style="word-break: break-all" th:text="${mes.getCiphertext()}">...</td>
+            </tr>
+        </th:block>
+    </table>
+    <ul th:if="${messages}" class="pagination justify-content-center">
+        <li class="page-item" th:each="i : ${#numbers.sequence(1,messages.totalPages)}">
+            <a th:href="@{/list(page=${i})}" th:text="${i}" class="page-link"></a>
+        </li>
+    </ul>
+    <p th:text="${noEntity}"></p>
+</div>
+<div th:replace="template::footer"></div>
+</body>
+</html>

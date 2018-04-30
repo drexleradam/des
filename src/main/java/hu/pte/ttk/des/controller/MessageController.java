@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Base64;
 
 @Controller
-public class MyController {
+public class MessageController {
 
     private MyDes des = new MyDes();
 
@@ -102,6 +102,7 @@ public class MyController {
                           Model model) {
         model.addAttribute("title", "Dekódolás");
         model.addAttribute("button", "dekódolás");
+        model.addAttribute("input_label", "Kódolt szöveg:");
         model.addAttribute("output_label", "Nyílt szöveg:");
         model.addAttribute("text", text);
         model.addAttribute("key", key);

@@ -10,12 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
 
-    MessageRepository mr;
-
     @Autowired
-    public void setMr(MessageRepository mr) {
-        this.mr = mr;
-    }
+    MessageRepository mr;
 
     public Page<Message> getAll(int page, int size) {
         return mr.findAll(PageRequest.of(page - 1, size));
